@@ -1,7 +1,7 @@
 Overview
 ========
 
-This is a django project that provides DSos support for Grafana. It relies on sosdb-ui
+This is a django project that provides DSos support for Grafana. It relies on sosdb-ui,
 DSos, and apache.
 
 Installation
