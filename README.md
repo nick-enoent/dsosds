@@ -1,15 +1,14 @@
 Overview
 ========
 
-This is a django project that provides SOS support for Grafana. It relies on sosdb-ui
-SOS, and apache.
+This is a django project that provides DSos support for Grafana. It relies on sosdb-ui
+DSos, and apache.
 
 Installation
 ============
 Install Dependencies:
     sosdb-ui
-    SOS
-    sosds (Grafana datasource for SOS)
+    DSOS
     Grafana
 
 Install package from source
@@ -23,14 +22,14 @@ cd build
 make
 make install
 
-## SOS JSON Datasource
+## DSOS JSON Datasource
 ========================
 Implements the following urls:
 
  * `/` should return 200 ok. Used for "Test connection" on the datasource config page.
- * `/search` used by the find metric options on the query tab in panels.
+ * `/search` is not yet implemented for dsosds
  * `/query` returns metrics based on input.
- * `/annotations` is not currently supported by sos_web_svcs.
+ * `/annotations` is not currently supported by dsosds
 
 ### Query API
 Format
