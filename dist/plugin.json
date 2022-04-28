@@ -1,6 +1,6 @@
 {
-  "name": "Sos",
-  "id": "sosds",
+  "name": "DSosDS",
+  "id": "dsosds",
   "type": "datasource",
   "category" : "tsdb",
 
@@ -10,7 +10,7 @@
   "annotations": true,
 
   "info": {
-    "description": "sos datasource plugin",
+    "description": "dsos datasource plugin",
     "author": {
       "name": "Open Grid Computing",
       "url": "http://www.opengridcomputing.com"

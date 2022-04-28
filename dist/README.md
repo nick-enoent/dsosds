@@ -9,7 +9,7 @@ Installation
 Install Dependencies:
     sosdb-ui
     SOS
-    sosds (Grafana datasource for SOS)
+    dsosds (Grafana datasource for SOS)
     Grafana
 
 Install package from source
