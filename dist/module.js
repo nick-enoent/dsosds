@@ -1,4 +1,4 @@
-define(["@emotion/css","@grafana/data","@grafana/runtime","@grafana/ui","lodash","react"], function(__WEBPACK_EXTERNAL_MODULE__emotion_css__, __WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_runtime__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
+define(["@grafana/data","@grafana/runtime","@grafana/ui","lodash","react"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_runtime__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -191,38 +191,6 @@ function arrayLikeKeys(value, inherited) {
 }
 
 module.exports = arrayLikeKeys;
-
-
-/***/ }),
-
-/***/ "../node_modules/lodash/_arrayMap.js":
-/*!*******************************************!*\
-  !*** ../node_modules/lodash/_arrayMap.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/**
- * A specialized version of `_.map` for arrays without support for iteratee
- * shorthands.
- *
- * @private
- * @param {Array} [array] The array to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the new mapped array.
- */
-function arrayMap(array, iteratee) {
-  var index = -1,
-      length = array == null ? 0 : array.length,
-      result = Array(length);
-
-  while (++index < length) {
-    result[index] = iteratee(array[index], index, array);
-  }
-  return result;
-}
-
-module.exports = arrayMap;
 
 
 /***/ }),
@@ -556,54 +524,6 @@ function baseTimes(n, iteratee) {
 }
 
 module.exports = baseTimes;
-
-
-/***/ }),
-
-/***/ "../node_modules/lodash/_baseToString.js":
-/*!***********************************************!*\
-  !*** ../node_modules/lodash/_baseToString.js ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Symbol = __webpack_require__(/*! ./_Symbol */ "../node_modules/lodash/_Symbol.js"),
-    arrayMap = __webpack_require__(/*! ./_arrayMap */ "../node_modules/lodash/_arrayMap.js"),
-    isArray = __webpack_require__(/*! ./isArray */ "../node_modules/lodash/isArray.js"),
-    isSymbol = __webpack_require__(/*! ./isSymbol */ "../node_modules/lodash/isSymbol.js");
-
-/** Used as references for various `Number` constants. */
-var INFINITY = 1 / 0;
-
-/** Used to convert symbols to primitives and strings. */
-var symbolProto = Symbol ? Symbol.prototype : undefined,
-    symbolToString = symbolProto ? symbolProto.toString : undefined;
-
-/**
- * The base implementation of `_.toString` which doesn't convert nullish
- * values to empty strings.
- *
- * @private
- * @param {*} value The value to process.
- * @returns {string} Returns the string.
- */
-function baseToString(value) {
-  // Exit early for strings to avoid a performance hit in some environments.
-  if (typeof value == 'string') {
-    return value;
-  }
-  if (isArray(value)) {
-    // Recursively convert values (susceptible to call stack limits).
-    return arrayMap(value, baseToString) + '';
-  }
-  if (isSymbol(value)) {
-    return symbolToString ? symbolToString.call(value) : '';
-  }
-  var result = (value + '');
-  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
-}
-
-module.exports = baseToString;
 
 
 /***/ }),
@@ -1763,46 +1683,6 @@ module.exports = isObjectLike;
 
 /***/ }),
 
-/***/ "../node_modules/lodash/isSymbol.js":
-/*!******************************************!*\
-  !*** ../node_modules/lodash/isSymbol.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ "../node_modules/lodash/_baseGetTag.js"),
-    isObjectLike = __webpack_require__(/*! ./isObjectLike */ "../node_modules/lodash/isObjectLike.js");
-
-/** `Object#toString` result references. */
-var symbolTag = '[object Symbol]';
-
-/**
- * Checks if `value` is classified as a `Symbol` primitive or object.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
- * @example
- *
- * _.isSymbol(Symbol.iterator);
- * // => true
- *
- * _.isSymbol('abc');
- * // => false
- */
-function isSymbol(value) {
-  return typeof value == 'symbol' ||
-    (isObjectLike(value) && baseGetTag(value) == symbolTag);
-}
-
-module.exports = isSymbol;
-
-
-/***/ }),
-
 /***/ "../node_modules/lodash/isTypedArray.js":
 /*!**********************************************!*\
   !*** ../node_modules/lodash/isTypedArray.js ***!
@@ -1909,84 +1789,6 @@ function stubFalse() {
 }
 
 module.exports = stubFalse;
-
-
-/***/ }),
-
-/***/ "../node_modules/lodash/toString.js":
-/*!******************************************!*\
-  !*** ../node_modules/lodash/toString.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseToString = __webpack_require__(/*! ./_baseToString */ "../node_modules/lodash/_baseToString.js");
-
-/**
- * Converts `value` to a string. An empty string is returned for `null`
- * and `undefined` values. The sign of `-0` is preserved.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to convert.
- * @returns {string} Returns the converted string.
- * @example
- *
- * _.toString(null);
- * // => ''
- *
- * _.toString(-0);
- * // => '-0'
- *
- * _.toString([1, 2, 3]);
- * // => '1,2,3'
- */
-function toString(value) {
-  return value == null ? '' : baseToString(value);
-}
-
-module.exports = toString;
-
-
-/***/ }),
-
-/***/ "../node_modules/lodash/uniqueId.js":
-/*!******************************************!*\
-  !*** ../node_modules/lodash/uniqueId.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var toString = __webpack_require__(/*! ./toString */ "../node_modules/lodash/toString.js");
-
-/** Used to generate unique IDs. */
-var idCounter = 0;
-
-/**
- * Generates a unique ID. If `prefix` is given, the ID is appended to it.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Util
- * @param {string} [prefix=''] The value to prefix the ID with.
- * @returns {string} Returns the unique ID.
- * @example
- *
- * _.uniqueId('contact_');
- * // => 'contact_104'
- *
- * _.uniqueId();
- * // => '105'
- */
-function uniqueId(prefix) {
-  var id = ++idCounter;
-  return toString(prefix) + id;
-}
-
-module.exports = uniqueId;
 
 
 /***/ }),
@@ -2363,9 +2165,7 @@ var sosVersion = [{
   value: 'dsos'
 }];
 
-var ConfigEditor =
-/** @class */
-function (_super) {
+var ConfigEditor = function (_super) {
   tslib_1.__extends(ConfigEditor, _super);
 
   function ConfigEditor(props) {
@@ -2410,285 +2210,6 @@ exports["default"] = ConfigEditor;
 
 /***/ }),
 
-/***/ "./FilterInput.tsx":
-/*!*************************!*\
-  !*** ./FilterInput.tsx ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.FilterInp = void 0;
-
-var tslib_1 = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
-
-var react_1 = tslib_1.__importStar(__webpack_require__(/*! react */ "react"));
-
-var css_1 = __webpack_require__(/*! @emotion/css */ "@emotion/css");
-
-var ui_1 = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
-
-var renderRemovableButton = function renderRemovableButton(onClick) {
-  return react_1["default"].createElement(ui_1.MenuGroup, {
-    label: "",
-    ariaLabel: ""
-  }, react_1["default"].createElement(ui_1.MenuItem, {
-    label: "remove",
-    ariaLabel: "remove",
-    onClick: onClick
-  }));
-};
-
-var noRightMargin = css_1.css({
-  paddingRight: '0',
-  marginRight: '0'
-});
-
-var getFilterClass = function getFilterClass(theme) {
-  return css_1.cx('gf-form-label', css_1.css({
-    paddingLeft: '0',
-    lineHeight: theme.typography.body.lineHeight,
-    fontSize: theme.typography.body.fontSize
-  }));
-};
-
-var openButtonClass = css_1.css({
-  width: 'auto',
-  cursor: 'pointer'
-});
-
-var RemoveFilter = function RemoveFilter(_a) {
-  var name = _a.name,
-      onRemove = _a.onRemove;
-  return react_1["default"].createElement(ui_1.WithContextMenu, {
-    renderMenuItems: function renderMenuItems() {
-      return renderRemovableButton(onRemove);
-    }
-  }, function (_a) {
-    var openMenu = _a.openMenu;
-    return react_1["default"].createElement("button", {
-      className: css_1.cx('gf-form-label', noRightMargin),
-      onClick: openMenu
-    }, "X");
-  });
-};
-
-var FilterInp = function FilterInp(props) {
-  var grafanaTheme = ui_1.useTheme2();
-  var filterClass = react_1.useMemo(function () {
-    return getFilterClass(grafanaTheme);
-  }, [grafanaTheme]);
-  var value = props.value,
-      onChange = props.onChange,
-      id = props.id,
-      onRemove = props.onRemove,
-      placeholder = props.placeholder;
-
-  var _a = tslib_1.__read(react_1.useState(true), 2),
-      isOpen = _a[0],
-      setOpen = _a[1];
-
-  var handleChange = function handleChange(event) {
-    onChange(event.target.value, id);
-  };
-
-  var handleRemove = function handleRemove() {
-    onRemove(id);
-    setOpen(false);
-  };
-
-  var handleBlur = function handleBlur() {
-    setOpen(false);
-  };
-
-  if (!isOpen) {
-    return react_1["default"].createElement(react_1["default"].Fragment, null, react_1["default"].createElement("div", {
-      className: filterClass
-    }, react_1["default"].createElement(ui_1.InlineLabel, {
-      as: "button",
-      className: openButtonClass,
-      onClick: function onClick() {
-        setOpen(true);
-      }
-    }, value), react_1["default"].createElement(RemoveFilter, {
-      name: value,
-      onRemove: handleRemove
-    })));
-  } else {
-    return react_1["default"].createElement(ui_1.Input, {
-      autoFocus: true,
-      css: true,
-      type: "text",
-      value: value,
-      spellCheck: false,
-      onBlur: handleBlur,
-      onChange: handleChange,
-      placeholder: placeholder
-    });
-  }
-};
-
-exports.FilterInp = FilterInp;
-
-/***/ }),
-
-/***/ "./FilterMenu.tsx":
-/*!************************!*\
-  !*** ./FilterMenu.tsx ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SosFilters = void 0;
-
-var tslib_1 = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
-
-var FilterInput_1 = __webpack_require__(/*! ./FilterInput */ "./FilterInput.tsx");
-
-var uniqueId_1 = tslib_1.__importDefault(__webpack_require__(/*! lodash/uniqueId */ "../node_modules/lodash/uniqueId.js"));
-
-var react_1 = tslib_1.__importStar(__webpack_require__(/*! react */ "react"));
-/*yarn
-const sosFilters: string[] = ['component_id', 'job_id', 'user_name', 'extra_params'];
-const FilterDropDown = (props: Props): JSX.Element => {
-  const data = props.data;
-  return (
-    <>
-      <div className="gf-form-label">
-        <ul className="dropdown-menu">
-          {data.map(item => (
-            <li key={item} className="dropdown-submenu">
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
-  );
-};
-function updateFilterQuery(query: SosQuery): SosQuery {
-  const qCopy = cloneDeep(query);
-  const model = new SosQueryModel(qCopy);
-  model.addFilter();
-  return model.target;
-}
-*/
-
-
-var createFilterConfig = function createFilterConfig(values) {
-  return values.map(function (value) {
-    return {
-      id: uniqueId_1["default"]('input'),
-      value: value
-    };
-  });
-};
-
-var newFilter = function newFilter() {
-  return {
-    id: uniqueId_1["default"]('input'),
-    value: ''
-  };
-};
-
-var SosFilters = function SosFilters(props) {
-  var values = props.values,
-      onChange = props.onChange;
-
-  var _a = tslib_1.__read(react_1.useState([]), 2),
-      filterConfigs = _a[0],
-      setFilterConfigs = _a[1];
-
-  react_1.useEffect(function () {
-    if (filterConfigs.length) {
-      return;
-    }
-
-    var initialFilters;
-
-    if (!values || !values.length) {} else {
-      initialFilters = createFilterConfig(values);
-      setFilterConfigs(initialFilters);
-    }
-  }, [values, filterConfigs]);
-
-  var addNewFilter = function addNewFilter() {
-    if (filterConfigs === null || filterConfigs === void 0 ? void 0 : filterConfigs.length) {
-      setFilterConfigs(tslib_1.__spreadArray(tslib_1.__spreadArray([], tslib_1.__read(filterConfigs)), [newFilter()]));
-    } else {
-      setFilterConfigs([newFilter()]);
-    }
-  };
-
-  var filterChangeHandler = function filterChangeHandler(value, id) {
-    var newValues = [];
-    var newFilters = filterConfigs === null || filterConfigs === void 0 ? void 0 : filterConfigs.map(function (input) {
-      newValues.push(input.value);
-
-      if (input.id !== id) {
-        return input;
-      }
-
-      return tslib_1.__assign(tslib_1.__assign({}, input), {
-        value: value
-      });
-    });
-    onChange(newValues);
-    setFilterConfigs(newFilters);
-  };
-
-  var filterRemoveHandler = function filterRemoveHandler(id) {
-    var screenedFilters = filterConfigs === null || filterConfigs === void 0 ? void 0 : filterConfigs.filter(function (input) {
-      return input.id !== id;
-    });
-
-    if (screenedFilters.length === 0) {
-      setFilterConfigs([]);
-    } else {
-      setFilterConfigs(function (prevArray) {
-        return screenedFilters;
-      });
-    }
-  };
-
-  var renderFilters = function renderFilters(input) {
-    return react_1["default"].createElement("div", {
-      className: "gf-form"
-    }, react_1["default"].createElement(FilterInput_1.FilterInp, {
-      key: input.id,
-      value: input.value,
-      id: input.id,
-      onChange: filterChangeHandler,
-      onRemove: filterRemoveHandler
-    }));
-  };
-
-  return react_1["default"].createElement(react_1["default"].Fragment, null, react_1["default"].createElement("div", {
-    id: "sos_filters",
-    className: "gf-form-inline"
-  }, filterConfigs.map(renderFilters), react_1["default"].createElement("a", {
-    className: "gf-form-label fa fa-plus",
-    onClick: function onClick() {
-      addNewFilter();
-    }
-  })));
-};
-
-exports.SosFilters = SosFilters;
-
-/***/ }),
-
 /***/ "./QueryEditor.tsx":
 /*!*************************!*\
   !*** ./QueryEditor.tsx ***!
@@ -2712,15 +2233,11 @@ var react_1 = tslib_1.__importStar(__webpack_require__(/*! react */ "react"));
 
 var ui_1 = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
 
-var FilterMenu_1 = __webpack_require__(/*! FilterMenu */ "./FilterMenu.tsx");
-
 var types_1 = __webpack_require__(/*! ./types */ "./types.ts");
 
 var FormField = ui_1.LegacyForms.FormField;
 
-var QueryEditor =
-/** @class */
-function (_super) {
+var QueryEditor = function (_super) {
   tslib_1.__extends(QueryEditor, _super);
 
   function QueryEditor(props) {
@@ -2752,17 +2269,21 @@ function (_super) {
     }*/
 
 
-    _this.onFilterChange = function (newFilters) {
+    _this.onExtraChange = function (event) {
       var _a = _this.props,
           onChange = _a.onChange,
           query = _a.query;
-
-      _this.setState({
-        filters: newFilters
-      });
-
       onChange(tslib_1.__assign(tslib_1.__assign({}, query), {
-        filters: _this.state.filters
+        extraParams: event.target.value
+      }));
+    };
+
+    _this.onFilterChange = function (event) {
+      var _a = _this.props,
+          onChange = _a.onChange,
+          query = _a.query;
+      onChange(tslib_1.__assign(tslib_1.__assign({}, query), {
+        filters: event.target.value
       }));
     };
 
@@ -2816,6 +2337,7 @@ function (_super) {
     var query = defaults_1["default"](this.props.query, types_1.defaultQuery);
     var analysisModule = query.analysisModule,
         container = query.container,
+        extraParams = query.extraParams,
         filters = query.filters,
         format = query.format,
         queryType = query.queryType,
@@ -2836,15 +2358,14 @@ function (_super) {
       onChange: this.onQueryTypeChange
     }, react_1["default"].createElement("option", {
       selected: true
-    }, "metrics"), react_1["default"].createElement("option", null, "analysis"))), queryType === 'analysis' && react_1["default"].createElement("div", {
-      className: "gf-form"
-    }, react_1["default"].createElement("label", {
-      className: "gf-form-label query-keyword width-8"
-    }, "Analysis Module"), react_1["default"].createElement("select", {
+    }, "metrics"), react_1["default"].createElement("option", null, "analysis"))), queryType === 'analysis' && react_1["default"].createElement(FormField, {
+      labelWidth: 8,
       value: analysisModule,
-      className: "gf-form-input width-12",
-      onChange: this.onAnalysisChange
-    }, react_1["default"].createElement("option", null), react_1["default"].createElement("option", null, "compMinMeanMax"), react_1["default"].createElement("option", null, "meanMetricRate"), react_1["default"].createElement("option", null, "metricRateBin"), react_1["default"].createElement("option", null, "papiGetLikeJobs"), react_1["default"].createElement("option", null, "papiJobsTable"), react_1["default"].createElement("option", null, "papiJobStatTable"), react_1["default"].createElement("option", null, "papiMeanJobMetrics"), react_1["default"].createElement("option", null, "papiTimeseries"), react_1["default"].createElement("option", null, "rankMemByJob"))), react_1["default"].createElement("div", {
+      label: "Analysis",
+      tooltip: "Name of analysis module",
+      onChange: this.onAnalysisChange,
+      className: "gf-form-label query-keyword"
+    }), react_1["default"].createElement("div", {
       className: "gf-form"
     }, react_1["default"].createElement("label", {
       className: "gf-form-label query-keyword width-8"
@@ -2892,6 +2413,13 @@ function (_super) {
       label: "Metric",
       tooltip: "Metric to query",
       className: "gf-form-label query-keyword"
+    }), queryType === 'analysis' && react_1["default"].createElement(FormField, {
+      labelWidth: 9,
+      value: extraParams,
+      onChange: this.onExtraChange,
+      label: "Extra Parameters",
+      tooltip: "Additional keyword to specify for analysis modules",
+      className: "gf-form-label query-keyword"
     })), react_1["default"].createElement("div", {
       className: "gf-form gf-form--grow"
     }, react_1["default"].createElement("div", {
@@ -2900,12 +2428,14 @@ function (_super) {
       className: "gf-form-inline"
     }, react_1["default"].createElement("div", {
       className: "gf-form"
-    }, react_1["default"].createElement("label", {
-      className: "gf-form-label query-keyword width-8"
-    }, "Filter")), react_1["default"].createElement(FilterMenu_1.SosFilters, {
+    }, react_1["default"].createElement(FormField, {
+      labelWidth: 8,
+      value: filters,
       onChange: this.onFilterChange,
-      values: filters
-    }), react_1["default"].createElement("div", {
+      label: "Filters",
+      tooltip: "Adds filters to 'where' clause of sql query e.g. '(component_id==10000)'",
+      className: "gf-form-label query-keyword"
+    })), react_1["default"].createElement("div", {
       className: "gf-form gf-form--grow"
     }, react_1["default"].createElement("div", {
       className: "gf-form-label gf-form-label--grow"
@@ -2942,9 +2472,7 @@ var data_1 = __webpack_require__(/*! @grafana/data */ "@grafana/data");
 
 var runtime_1 = __webpack_require__(/*! @grafana/runtime */ "@grafana/runtime");
 
-var SosDataSource =
-/** @class */
-function (_super) {
+var SosDataSource = function (_super) {
   tslib_1.__extends(SosDataSource, _super);
 
   function SosDataSource(instanceSettings, templateSrv) {
@@ -2971,10 +2499,10 @@ function (_super) {
         container: _this.templateSrv.replace(target.container) || null,
         schema: _this.templateSrv.replace(target.schema) || null,
         query_type: target.queryType || 'metrics',
-        filters: target.filters || null,
+        filters: _this.templateSrv.replace(target.filters) || null,
         format: _this.templateSrv.replace(target.format) || 'time_series',
         analysis_module: _this.templateSrv.replace(target.analysisModule) || null,
-        extra_params: _this.templateSrv.replace(target.extra_params) || null,
+        extra_params: _this.templateSrv.replace(target.extraParams) || null,
         refId: target.refId,
         hide: target.hide
       };
@@ -3121,17 +2649,6 @@ exports.defaultQuery = void 0;
 exports.defaultQuery = {
   frequency: 1.0
 };
-
-/***/ }),
-
-/***/ "@emotion/css":
-/*!*******************************!*\
-  !*** external "@emotion/css" ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__emotion_css__;
 
 /***/ }),
 

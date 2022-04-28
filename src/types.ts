@@ -15,9 +15,10 @@ export interface SosDataSourceOptions extends DataSourceJsonData {
 export interface SosQuery extends DataQuery {
   analysisModule?: string;
   container: string;
+  extraParams: string;
   schema: string;
   target: string;
-  filters?: string[];
+  filters?: string;
   format: string;
   frequency: number;
   queryType: string;

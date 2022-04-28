@@ -4,7 +4,6 @@ import React, { ChangeEvent, PureComponent } from 'react';
 import { LegacyForms } from '@grafana/ui';
 import { QueryEditorProps } from '@grafana/data';
 import { SosDataSource } from './datasource';
-import { SosFilters } from 'FilterMenu';
 import { SosDataSourceOptions, SosQuery, defaultQuery } from './types';
 
 const { FormField } = LegacyForms;
@@ -24,7 +23,7 @@ export class QueryEditor extends PureComponent<Props, FilterState> {
     };
   }
 
-  onAnalysisChange = (event: ChangeEvent<HTMLSelectElement>) => {
+  onAnalysisChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
     onChange({ ...query, analysisModule: event.target.value });
   };
@@ -39,11 +38,13 @@ export class QueryEditor extends PureComponent<Props, FilterState> {
     model.addFilter();
     return model.target;
   }*/
-
-  onFilterChange = (newFilters: string[]) => {
+  onExtraChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
-    this.setState({ filters: newFilters });
-    onChange({ ...query, filters: this.state.filters });
+    onChange({...query, extraParams: event.target.value });
+  };
+  onFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onChange, query } = this.props;
+    onChange({ ...query, filters: event.target.value });
   };
   onFormatChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { onChange, query } = this.props;
@@ -67,7 +68,7 @@ export class QueryEditor extends PureComponent<Props, FilterState> {
 
   render() {
     const query = defaults(this.props.query, defaultQuery);
-    const { analysisModule, container, filters, format, queryType, schema, target } = query;
+    const { analysisModule, container, extraParams, filters, format, queryType, schema, target } = query;
 
     return (
       <>
@@ -86,21 +87,14 @@ export class QueryEditor extends PureComponent<Props, FilterState> {
               </select>
             </div>
             {queryType === 'analysis' && (
-              <div className="gf-form">
-                <label className="gf-form-label query-keyword width-8">Analysis Module</label>
-                <select value={analysisModule} className="gf-form-input width-12" onChange={this.onAnalysisChange}>
-                  <option></option>
-                  <option>compMinMeanMax</option>
-                  <option>meanMetricRate</option>
-                  <option>metricRateBin</option>
-                  <option>papiGetLikeJobs</option>
-                  <option>papiJobsTable</option>
-                  <option>papiJobStatTable</option>
-                  <option>papiMeanJobMetrics</option>
-                  <option>papiTimeseries</option>
-                  <option>rankMemByJob</option>
-                </select>
-              </div>
+              <FormField
+                labelWidth={8}
+                value={analysisModule}
+                label="Analysis"
+                tooltip="Name of analysis module"
+                onChange={this.onAnalysisChange}
+                className="gf-form-label query-keyword"
+              />
             )}
             <div className="gf-form">
               <label className="gf-form-label query-keyword width-8">Query Format</label>
@@ -154,6 +148,16 @@ export class QueryEditor extends PureComponent<Props, FilterState> {
                 tooltip="Metric to query"
                 className="gf-form-label query-keyword"
               />
+              {queryType === 'analysis' && (
+                <FormField
+                  labelWidth={9}
+                  value={extraParams}
+                  onChange={this.onExtraChange}
+                  label="Extra Parameters"
+                  tooltip="Additional keyword to specify for analysis modules"
+                  className="gf-form-label query-keyword"
+                />
+              )}
             </div>
             <div className="gf-form gf-form--grow">
               <div className="gf-form-label gf-form-label--grow"></div>
@@ -161,9 +165,15 @@ export class QueryEditor extends PureComponent<Props, FilterState> {
           </div>
           <div className="gf-form-inline">
             <div className="gf-form">
-              <label className="gf-form-label query-keyword width-8">Filter</label>
+              <FormField
+                labelWidth={8}
+                value={filters}
+                onChange={this.onFilterChange}
+                label="Filters"
+                tooltip="Adds filters to 'where' clause of sql query e.g. '(component_id==10000)'"
+                className="gf-form-label query-keyword"
+              />
             </div>
-            <SosFilters onChange={this.onFilterChange} values={filters}></SosFilters>
             <div className="gf-form gf-form--grow">
               <div className="gf-form-label gf-form-label--grow"></div>
             </div>
