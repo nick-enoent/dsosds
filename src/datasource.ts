@@ -25,10 +25,10 @@ export class SosDataSource extends DataSourceApi<SosQuery, SosDataSourceOptions>
         container: this.templateSrv.replace(target.container) || null,
         schema: this.templateSrv.replace(target.schema) || null,
         query_type: target.queryType || 'metrics',
-        filters: target.filters || null,
+        filters: this.templateSrv.replace(target.filters) || null,
         format: this.templateSrv.replace(target.format) || 'time_series',
         analysis_module: this.templateSrv.replace(target.analysisModule) || null,
-        extra_params: this.templateSrv.replace(target.extra_params) || null,
+        extra_params: this.templateSrv.replace(target.extraParams) || null,
         refId: target.refId,
         hide: target.hide,
       };

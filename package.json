@@ -1,5 +1,5 @@
 {
-  "name": "open-grid-computing-sosds",
+  "name": "open-grid-computing-dsosds",
   "version": "2.0.0",
   "description": "Data source for DSOS databases",
   "scripts": {
@@ -15,7 +15,7 @@
   "devDependencies": {
     "@grafana/data": "latest",
     "@grafana/runtime": "latest",
-    "@grafana/toolkit": "latest",
+    "@grafana/toolkit": "^7.1.5",
     "@grafana/ui": "latest",
     "@testing-library/jest-dom": "5.4.0",
     "@testing-library/react": "^10.0.2",
@@ -25,6 +25,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.1",
+    "yarn": "^1.22.15"
   }
 }

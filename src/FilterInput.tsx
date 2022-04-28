@@ -1,7 +1,5 @@
-import React, { ChangeEvent, useMemo, useState } from 'react';
-import { cx, css } from '@emotion/css';
-import { Input, MenuGroup, MenuItem, WithContextMenu, useTheme2, InlineLabel } from '@grafana/ui';
-import { GrafanaTheme2 } from '@grafana/data';
+import React, { ChangeEvent, useState } from 'react';
+import { Input, MenuGroup, MenuItem, WithContextMenu, InlineLabel } from '@grafana/ui';
 
 type InputProps = {
   value: string;
@@ -20,32 +18,28 @@ const renderRemovableButton = (onClick: () => void) => {
   );
 };
 
-const noRightMargin = css({
-  paddingRight: '0',
-  marginRight: '0',
-});
-
-const getFilterClass = (theme: GrafanaTheme2) => {
-  return cx(
-    'gf-form-label',
-    css({
-      paddingLeft: '0',
-      lineHeight: theme.typography.body.lineHeight,
-      fontSize: theme.typography.body.fontSize,
-    })
-  );
+/*const noRightMargin = {
+  paddingRight: 0,
+  marginRight: 0,
 };
 
-const openButtonClass = css({
-  width: 'auto',
-  cursor: 'pointer',
-});
+const getFilterClass = (theme: GrafanaTheme2) => {
+  return {
+    paddingLeft: 0,
+    lineHeight: theme.typography.body.lineHeight,
+    fontSize: theme.typography.body.fontSize,
+  };
+};
 
+const openButtonClass = {
+  cursor: 'pointer',
+};
+*/
 const RemoveFilter = ({ name, onRemove }: { name: string; onRemove: () => void }) => {
   return (
     <WithContextMenu renderMenuItems={() => renderRemovableButton(onRemove)}>
       {({ openMenu }) => (
-        <button className={cx('gf-form-label', noRightMargin)} onClick={openMenu}>
+        <button className={'noRightMargin'} onClick={openMenu}>
           X
         </button>
       )}
@@ -54,8 +48,8 @@ const RemoveFilter = ({ name, onRemove }: { name: string; onRemove: () => void }
 };
 
 export const FilterInp = (props: InputProps): JSX.Element => {
-  const grafanaTheme = useTheme2();
-  const filterClass = useMemo(() => getFilterClass(grafanaTheme), [grafanaTheme]);
+  //const grafanaTheme = useTheme2();
+  //const filterClass = useMemo(() => 'newTheme', [grafanaTheme]);
   const { value, onChange, id, onRemove, placeholder } = props;
   const [isOpen, setOpen] = useState(true);
 
@@ -72,10 +66,10 @@ export const FilterInp = (props: InputProps): JSX.Element => {
   if (!isOpen) {
     return (
       <>
-        <div className={filterClass}>
+        <div className={'paddingLeft: 0'}>
           <InlineLabel
             as="button"
-            className={openButtonClass}
+            className={'cursor:pointer'}
             onClick={() => {
               setOpen(true);
             }}
@@ -89,8 +83,8 @@ export const FilterInp = (props: InputProps): JSX.Element => {
   } else {
     return (
       <Input
-        autoFocus
         css
+        autoFocus
         type="text"
         value={value}
         spellCheck={false}
