@@ -10,7 +10,11 @@ Install Dependencies:
     sosdb-ui
     DSOS
     dsosds (Grafana datasource for SOS)
-    Grafana
+    Grafana >= 8.1.2
+
+DevDependencies
+===============
+    nodejs == 14
 
 Install package from source
 ===========================
