@@ -40,7 +40,7 @@ export class QueryEditor extends PureComponent<Props, FilterState> {
   }*/
   onExtraChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
-    onChange({...query, extraParams: event.target.value });
+    onChange({ ...query, extraParams: event.target.value });
   };
   onFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
