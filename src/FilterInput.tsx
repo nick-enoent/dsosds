@@ -83,7 +83,6 @@ export const FilterInp = (props: InputProps): JSX.Element => {
   } else {
     return (
       <Input
-        css
         autoFocus
         type="text"
         value={value}
