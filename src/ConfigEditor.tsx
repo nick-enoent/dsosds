@@ -25,7 +25,7 @@ export class ConfigEditor extends PureComponent<Props> {
     return (
       <>
         <DataSourceHttpSettings
-          defaultUrl="http://localhost:8080/"
+          defaultUrl="http://localhost:8080/grafana/"
           dataSourceConfig={options}
           onChange={onOptionsChange}
         />
