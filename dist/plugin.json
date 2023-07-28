@@ -19,12 +19,12 @@
       "small": "img/ogc_logo.png",
       "large": "img/ogc_logo.png"
     },
-    "version": "2.0.0",
-    "updated": "2021-05-20"
+    "version": "2.1.0",
+    "updated": "2023-04-18"
   },
 
   "dependencies": {
-    "grafanaVersion": "7.x.x",
+    "grafanaVersion": "9.x.x",
     "systemjs" : "^0.19",
     "plugins": [ ]
   }
