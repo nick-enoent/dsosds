@@ -3,11 +3,13 @@ import _ from 'lodash';
 import { DataQueryRequest, DataQueryResponse, DataSourceApi, DataSourceInstanceSettings } from '@grafana/data';
 import { getBackendSrv, TemplateSrv } from '@grafana/runtime';
 import { SosQuery, SosDataSourceOptions } from './types';
+import { DsosCache } from './CacheLayer';
 
 export class SosDataSource extends DataSourceApi<SosQuery, SosDataSourceOptions> {
   type: string;
   name: string;
   url: any;
+  dsosCache: DsosCache;
   constructor(instanceSettings: DataSourceInstanceSettings<SosDataSourceOptions>, private templateSrv: TemplateSrv) {
     super(instanceSettings);
     this.type = instanceSettings.type;
@@ -16,6 +18,7 @@ export class SosDataSource extends DataSourceApi<SosQuery, SosDataSourceOptions>
     });
     this.name = instanceSettings.name;
     this.templateSrv = templateSrv;
+    this.dsosCache = new DsosCache(10);
   }
 
   buildQueryParameters(options: any) {
@@ -63,7 +66,16 @@ export class SosDataSource extends DataSourceApi<SosQuery, SosDataSourceOptions>
       data: params,
       headers: { 'Content-Type': 'application/json' },
     };
-    return this.doSosRequest(req_opts);
+    if (this.dsosCache.recordExists(this.url, params)) {
+      return new Promise((resolve) => resolve(this.dsosCache.get(this.url, params)));
+    }
+    return this.doSosRequest(req_opts).then(async (response) => {
+      if (!response.ok) {
+        throw response;
+      }
+      this.dsosCache.set(this.url, params, response);
+      return response;
+    });
   }
 
   async testDatasource() {

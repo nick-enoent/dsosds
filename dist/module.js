@@ -1797,7 +1797,7 @@ module.exports = stubFalse;
 /*!******************************************!*\
   !*** ../node_modules/tslib/tslib.es6.js ***!
   \******************************************/
-/*! exports provided: __extends, __assign, __rest, __decorate, __param, __esDecorate, __runInitializers, __propKey, __setFunctionName, __metadata, __awaiter, __generator, __createBinding, __exportStar, __values, __read, __spread, __spreadArrays, __spreadArray, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet, __classPrivateFieldIn */
+/*! exports provided: __extends, __assign, __rest, __decorate, __param, __esDecorate, __runInitializers, __propKey, __setFunctionName, __metadata, __awaiter, __generator, __createBinding, __exportStar, __values, __read, __spread, __spreadArrays, __spreadArray, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet, __classPrivateFieldIn, __addDisposableResource, __disposeResources, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1831,6 +1831,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldGet", function() { return __classPrivateFieldGet; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldSet", function() { return __classPrivateFieldSet; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldIn", function() { return __classPrivateFieldIn; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__addDisposableResource", function() { return __addDisposableResource; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__disposeResources", function() { return __disposeResources; });
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -1845,7 +1847,7 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-/* global Reflect, Promise */
+/* global Reflect, Promise, SuppressedError, Symbol */
 
 var extendStatics = function(d, b) {
     extendStatics = Object.setPrototypeOf ||
@@ -1913,10 +1915,10 @@ function __esDecorate(ctor, descriptorIn, decorators, contextIn, initializers, e
             if (result === null || typeof result !== "object") throw new TypeError("Object expected");
             if (_ = accept(result.get)) descriptor.get = _;
             if (_ = accept(result.set)) descriptor.set = _;
-            if (_ = accept(result.init)) initializers.push(_);
+            if (_ = accept(result.init)) initializers.unshift(_);
         }
         else if (_ = accept(result)) {
-            if (kind === "field") initializers.push(_);
+            if (kind === "field") initializers.unshift(_);
             else descriptor[key] = _;
         }
     }
@@ -2125,6 +2127,83 @@ function __classPrivateFieldIn(state, receiver) {
     return typeof state === "function" ? receiver === state : state.has(receiver);
 }
 
+function __addDisposableResource(env, value, async) {
+    if (value !== null && value !== void 0) {
+        if (typeof value !== "object") throw new TypeError("Object expected.");
+        var dispose;
+        if (async) {
+            if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+            dispose = value[Symbol.asyncDispose];
+        }
+        if (dispose === void 0) {
+            if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+            dispose = value[Symbol.dispose];
+        }
+        if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+        env.stack.push({ value: value, dispose: dispose, async: async });
+    }
+    else if (async) {
+        env.stack.push({ async: true });
+    }
+    return value;
+}
+
+var _SuppressedError = typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
+
+function __disposeResources(env) {
+    function fail(e) {
+        env.error = env.hasError ? new _SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
+        env.hasError = true;
+    }
+    function next() {
+        while (env.stack.length) {
+            var rec = env.stack.pop();
+            try {
+                var result = rec.dispose && rec.dispose.call(rec.value);
+                if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+            }
+            catch (e) {
+                fail(e);
+            }
+        }
+        if (env.hasError) throw env.error;
+    }
+    return next();
+}
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    __extends,
+    __assign,
+    __rest,
+    __decorate,
+    __param,
+    __metadata,
+    __awaiter,
+    __generator,
+    __createBinding,
+    __exportStar,
+    __values,
+    __read,
+    __spread,
+    __spreadArrays,
+    __spreadArray,
+    __await,
+    __asyncGenerator,
+    __asyncDelegator,
+    __asyncValues,
+    __makeTemplateObject,
+    __importStar,
+    __importDefault,
+    __classPrivateFieldGet,
+    __classPrivateFieldSet,
+    __classPrivateFieldIn,
+    __addDisposableResource,
+    __disposeResources,
+});
+
 
 /***/ }),
 
@@ -2189,6 +2268,74 @@ module.exports = function(module) {
 	return module;
 };
 
+
+/***/ }),
+
+/***/ "./CacheLayer.tsx":
+/*!************************!*\
+  !*** ./CacheLayer.tsx ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DsosCache = void 0;
+var DsosCache = /*#__PURE__*/_createClass(function DsosCache(maxCache) {
+  var _this = this;
+  _classCallCheck(this, DsosCache);
+  this.cache = [];
+  this.set = function (url, params, result) {
+    if (!_this.recordExists(url, params)) {
+      if (_this.cache.length >= _this.maxCache) {
+        var key = _this.cache.keys().next().value;
+        delete _this.cache[key];
+      }
+      _this.cache.push({
+        url: url,
+        params: {
+          start: new Date(params.range.from).getTime(),
+          end: new Date(params.range.to).getTime(),
+          targets: params.targets
+        },
+        result: result
+      });
+    }
+  };
+  this.get = function (url, params) {
+    var cacheRecord = _this.cache.find(function (x) {
+      if (x.url === url && JSON.stringify(x.params.targets) === JSON.stringify(params.targets)) {
+        return new Date(params.range.from).getTime() >= x.params.start && new Date(params.range.to).getTime() <= x.params.end;
+      } else {
+        return null;
+      }
+    });
+    if (cacheRecord) {
+      return cacheRecord.result;
+    }
+    return null;
+  };
+  this.recordExists = function (url, params) {
+    return !!_this.get(url, params);
+  };
+  this.maxCache = maxCache;
+  if (!DsosCache.instance) {
+    return DsosCache.instance;
+  }
+  DsosCache.instance = this;
+  return this;
+});
+exports.DsosCache = DsosCache;
 
 /***/ }),
 
@@ -2545,6 +2692,7 @@ var tslib_1 = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.
 var lodash_1 = (0, tslib_1.__importDefault)(__webpack_require__(/*! lodash */ "lodash"));
 var data_1 = __webpack_require__(/*! @grafana/data */ "@grafana/data");
 var runtime_1 = __webpack_require__(/*! @grafana/runtime */ "@grafana/runtime");
+var CacheLayer_1 = __webpack_require__(/*! ./CacheLayer */ "./CacheLayer.tsx");
 var SosDataSource = /*#__PURE__*/function (_data_1$DataSourceApi) {
   _inherits(SosDataSource, _data_1$DataSourceApi);
   var _super = _createSuper(SosDataSource);
@@ -2560,6 +2708,7 @@ var SosDataSource = /*#__PURE__*/function (_data_1$DataSourceApi) {
     });
     _this.name = instanceSettings.name;
     _this.templateSrv = templateSrv;
+    _this.dsosCache = new CacheLayer_1.DsosCache(10);
     return _this;
   }
   _createClass(SosDataSource, [{
@@ -2620,10 +2769,11 @@ var SosDataSource = /*#__PURE__*/function (_data_1$DataSourceApi) {
   }, {
     key: "query",
     value: function query(options) {
-      return (0, tslib_1.__awaiter)(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      return (0, tslib_1.__awaiter)(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var _this3 = this;
         var params, req_opts;
-        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-          while (1) switch (_context2.prev = _context2.next) {
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
             case 0:
               params = this.buildQueryParameters(options);
               req_opts = {
@@ -2634,21 +2784,48 @@ var SosDataSource = /*#__PURE__*/function (_data_1$DataSourceApi) {
                   'Content-Type': 'application/json'
                 }
               };
-              return _context2.abrupt("return", this.doSosRequest(req_opts));
-            case 3:
+              if (!this.dsosCache.recordExists(this.url, params)) {
+                _context3.next = 4;
+                break;
+              }
+              return _context3.abrupt("return", new Promise(function (resolve) {
+                return resolve(_this3.dsosCache.get(_this3.url, params));
+              }));
+            case 4:
+              return _context3.abrupt("return", this.doSosRequest(req_opts).then(function (response) {
+                return (0, tslib_1.__awaiter)(_this3, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+                  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                    while (1) switch (_context2.prev = _context2.next) {
+                      case 0:
+                        if (response.ok) {
+                          _context2.next = 2;
+                          break;
+                        }
+                        throw response;
+                      case 2:
+                        this.dsosCache.set(this.url, params, response);
+                        return _context2.abrupt("return", response);
+                      case 4:
+                      case "end":
+                        return _context2.stop();
+                    }
+                  }, _callee2, this);
+                }));
+              }));
+            case 5:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
     }
   }, {
     key: "testDatasource",
     value: function testDatasource() {
-      return (0, tslib_1.__awaiter)(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      return (0, tslib_1.__awaiter)(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
         var options;
-        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-          while (1) switch (_context3.prev = _context3.next) {
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
             case 0:
               // Implement a health check for your data source.
               options = {
@@ -2658,7 +2835,7 @@ var SosDataSource = /*#__PURE__*/function (_data_1$DataSourceApi) {
                   'Content-Type': 'application/json'
                 }
               };
-              return _context3.abrupt("return", this.doSosRequest(options).then(function (response) {
+              return _context4.abrupt("return", this.doSosRequest(options).then(function (response) {
                 if (response.status === 200) {
                   return {
                     status: 'success',
@@ -2680,9 +2857,9 @@ var SosDataSource = /*#__PURE__*/function (_data_1$DataSourceApi) {
               }));
             case 2:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
-        }, _callee3, this);
+        }, _callee4, this);
       }));
     }
   }]);
