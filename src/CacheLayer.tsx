@@ -34,17 +34,32 @@ export class DsosCache {
   };
 
   get = (url: string, params: any): CacheResult | null => {
+    let partial = null;
     const cacheRecord = this.cache.find((x) => {
+      let start = new Date(params.range.from).getTime();
+      let end = new Date(params.range.to).getTime();
       if (x.url === url && JSON.stringify(x.params.targets) === JSON.stringify(params.targets)) {
-        return (
-          new Date(params.range.from).getTime() >= x.params.start && new Date(params.range.to).getTime() <= x.params.end
-        );
+        if (start >= x.params.start && end <= x.params.end) {
+          return true;
+        } else if (start < x.params.start && end < x.params.end) {
+          partial = [start, x.params.start];
+          return true;
+        } else if (start > x.params.end) {
+          return null;
+        } else if (start >= x.params.start && end > x.params.end) {
+          partial = [x.params.end, end];
+          return true;
+        } else {
+          return null;
+        }
       } else {
         return null;
       }
     });
-    if (cacheRecord) {
-      return cacheRecord.result;
+    if (partial) {
+      return [cacheRecord, partial];
+    } else if (cacheRecord) {
+      return [cacheRecord, null];
     }
     return null;
   };

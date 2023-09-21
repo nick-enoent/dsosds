@@ -66,14 +66,48 @@ export class SosDataSource extends DataSourceApi<SosQuery, SosDataSourceOptions>
       data: params,
       headers: { 'Content-Type': 'application/json' },
     };
-    if (this.dsosCache.recordExists(this.url, params)) {
-      return new Promise((resolve) => resolve(this.dsosCache.get(this.url, params)));
+    let cacheRecord: any = this.dsosCache.get(this.url, params);
+    if (cacheRecord !== null) {
+      //return new Promise((resolve) => resolve(this.dsosCache.get(this.url, params)));
+      if (cacheRecord[1] !== null) {
+        const full_from = params.range.from;
+        const full_to = params.range.to;
+        let partial = await this.partialDSosQuery(req_opts, cacheRecord[1]);
+        let i = 0;
+        if (partial.data.length === cacheRecord[0].result.data.length) {
+          while (i < cacheRecord[0].result.data.length) {
+            partial.data[i].datapoints = partial.data[i].datapoints.concat(cacheRecord[0].result.data[i].datapoints);
+            i += 1;
+          }
+        }
+        partial.config.data.range.from = full_from;
+        partial.config.data.range.to = full_to;
+        return new Promise((resolve) => resolve(partial));
+      }
+      return new Promise((resolve) => resolve(cacheRecord[0].result));
     }
     return this.doSosRequest(req_opts).then(async (response) => {
       if (!response.ok) {
         throw response;
       }
       this.dsosCache.set(this.url, params, response);
+      return response;
+    });
+  }
+
+  async partialDSosQuery(options: any, tstamps: [number, number, string]) {
+    options.data.range.from = new Date(tstamps[0]);
+    options.data.range.to = new Date(tstamps[1]);
+    let req_opts = {
+      method: 'POST',
+      url: this.url + '/query',
+      data: options.data,
+      headers: { 'Content-Type': 'application/json' },
+    };
+    return this.doSosRequest(req_opts).then(async (response) => {
+      if (!response.ok) {
+        throw response;
+      }
       return response;
     });
   }
