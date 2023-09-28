@@ -25,7 +25,7 @@ DSOS          - https://github.com/ovis-hpc/sos.git
 
 DevDependencies
 ===============
-    nodejs == 14
+    nodejs >= 18
 
 Install node_modules dependencies
 =================================
