@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { DataQueryRequest, DataQueryResponse, DataSourceApi, DataSourceInstanceSettings } from '@grafana/data';
-import { getBackendSrv, TemplateSrv } from '@grafana/runtime';
+import { getBackendSrv, getTemplateSrv } from '@grafana/runtime';
 import { SosQuery, SosDataSourceOptions } from './types';
 import { DsosCache } from './CacheLayer';
 
@@ -10,28 +10,27 @@ export class SosDataSource extends DataSourceApi<SosQuery, SosDataSourceOptions>
   name: string;
   url: any;
   dsosCache: DsosCache;
-  constructor(instanceSettings: DataSourceInstanceSettings<SosDataSourceOptions>, private templateSrv: TemplateSrv) {
+  constructor(instanceSettings: DataSourceInstanceSettings<SosDataSourceOptions>) {
     super(instanceSettings);
     this.type = instanceSettings.type;
     this.url = _.map(instanceSettings.url?.split(','), (url) => {
       return url.trim();
     });
     this.name = instanceSettings.name;
-    this.templateSrv = templateSrv;
     this.dsosCache = new DsosCache(10);
   }
 
   buildQueryParameters(options: any) {
     let targets = _.map(options.targets, (target) => {
       return {
-        target: this.templateSrv.replace(target.target) || null,
-        container: this.templateSrv.replace(target.container) || null,
-        schema: this.templateSrv.replace(target.schema) || null,
+        target: getTemplateSrv().replace(target.target) || null,
+        container: getTemplateSrv().replace(target.container) || null,
+        schema: getTemplateSrv().replace(target.schema) || null,
         query_type: target.queryType || 'metrics',
-        filters: this.templateSrv.replace(target.filters) || null,
-        format: this.templateSrv.replace(target.format) || 'time_series',
-        analysis_module: this.templateSrv.replace(target.analysisModule) || null,
-        extra_params: this.templateSrv.replace(target.extraParams) || null,
+        filters: getTemplateSrv().replace(target.filters) || null,
+        format: getTemplateSrv().replace(target.format) || 'time_series',
+        analysis_module: getTemplateSrv().replace(target.analysisModule) || null,
+        extra_params: getTemplateSrv().replace(target.extraParams) || null,
         refId: target.refId,
         hide: target.hide,
       };

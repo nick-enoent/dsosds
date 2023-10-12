@@ -8,13 +8,22 @@ Installation
 ============
 Install Dependencies:
     sosdb-ui
+    sosdb-grafana
+    numsos
     DSOS
     dsosds (Grafana datasource for SOS)
     Grafana >= 9
 
+Dependency Repos
+================
+sosdb-ui      - https://github.com/nick-enoent/sosdb-ui.git
+sosdb-grafana - https://github.com/nick-enoent/sosdb-grafana.git
+numsos        - https://github.com/nick-enoent/numsos.git
+DSOS          - https://github.com/ovis-hpc/sos.git
+
 DevDependencies
 ===============
-    nodejs >= 18
+    nodejs >= 16
 
 Install package from source
 ===========================
