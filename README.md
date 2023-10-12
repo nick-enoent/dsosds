@@ -13,6 +13,8 @@ Install Dependencies:
 The following repo's are not required on the system Grafana and DSosDS are
 installed on, but are required somewhere on your network in order to successfully query a SOS database.
     sosdb-ui
+    sosdb-grafana
+    numsos
     DSOS
 
 Dependency Repos
@@ -23,9 +25,16 @@ sosdb-grafana - https://github.com/nick-enoent/sosdb-grafana.git
 numsos        - https://github.com/nick-enoent/numsos.git
 DSOS          - https://github.com/ovis-hpc/sos.git
 
+Dependency Repos
+================
+sosdb-ui      - https://github.com/nick-enoent/sosdb-ui.git
+sosdb-grafana - https://github.com/nick-enoent/sosdb-grafana.git
+numsos        - https://github.com/nick-enoent/numsos.git
+DSOS          - https://github.com/ovis-hpc/sos.git
+
 DevDependencies
 ===============
-    nodejs >= 18
+    nodejs >= 16
 
 Install node_modules dependencies
 =================================
