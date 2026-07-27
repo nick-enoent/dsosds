@@ -6,16 +6,20 @@ DSos, and apache.
 
 Installation
 ============
+
 Install Dependencies:
+    Grafana >= 9
+
+The following repo's are not required on the system Grafana and DSosDS are
+installed on, but are required somewhere on your network in order to successfully query a SOS database.
     sosdb-ui
     sosdb-grafana
     numsos
     DSOS
-    dsosds (Grafana datasource for SOS)
-    Grafana >= 9
 
 Dependency Repos
 ================
+
 sosdb-ui      - https://github.com/nick-enoent/sosdb-ui.git
 sosdb-grafana - https://github.com/nick-enoent/sosdb-grafana.git
 numsos        - https://github.com/nick-enoent/numsos.git
@@ -25,16 +29,15 @@ DevDependencies
 ===============
     nodejs >= 16
 
-Install package from source
-===========================
-Sodb-grafana must be built with the same prefix as sosdb-ui
+Install node_modules dependencies
+=================================
+npm install
 
-./autogen.sh
-mkdir build
-cd build
-../configure --prefix=<default /var/www/ovis_web_svcs>
-make
-make install
+cp <dsosds_path> /var/lib/grafana/plugins
+
+/var/lib/grafana/plugins is the default path for Grafana third party plugins. If
+another directory has been specified for plugins in your grafana.ini, use the
+configured directory.
 
 ## DSOS JSON Datasource
 ========================
@@ -79,7 +82,7 @@ Query Type:
 		- requires job_id
 	papi_timeseries
 		- returns time_series data for papi metrics
-	
+
 Analysis:
 	- text input by user
 	- user defined python analytics module. pre-packaged modules currently include:
@@ -104,13 +107,13 @@ Analysis:
 		- returns sum of metrics provided per second ( Bytes per second )
 		Extra Parameters:
 			- threshold=<threshold>
-				
+
 			- meta
 				- must be included before "threshold" in query parameters e.g.
 					"meta&threshold=10"
 				- returns sum of metrics provided per second
 				  ( Inputs/Outputs per second )
-				
+
 Extra Parameters: Extra arguments used when analysis other than metric is selected
 
 
@@ -119,18 +122,18 @@ Example response
 ``` javascript
 [
   {
-    "target":"current_freemem", // The field being queried for 
+    "target":"current_freemem", // The field being queried for
     "datapoints":[
       [622,1450754160000],  // Metric value as a float , unixtimestamp in milliseconds
       [365,1450754220000]
-    ]   
-  },  
+    ]
+  },
   {
     "target":"nrx_RDMA",
     "datapoints":[
       [861,1450754160000],
       [767,1450754220000]
-    ]   
+    ]
   }
 ]
 ```
